@@ -1,3 +1,3 @@
 # golang_study_first
 
-- galang_study　練習問題提出用リポジトリ
+golang_study上期　練習問題提出用リポジトリ
