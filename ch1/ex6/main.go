@@ -37,9 +37,6 @@ func lissajous(out io.Writer) {
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0 // phase difference
 	num := 0
-	if num % len(palette) == 0 {
-		num = 1
-	} 
 	for i := 0; i < nframes; i++ {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
@@ -50,6 +47,9 @@ func lissajous(out io.Writer) {
 			//num++
 		}
 		num++
+		if num % len(palette) == 0 {
+			num = 1
+		} 
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
 		anim.Image = append(anim.Image, img)
