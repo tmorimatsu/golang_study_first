@@ -3,15 +3,12 @@ package main
 import (
 	"fmt"
 	"io"
-	//"io/ioutil"
 	"net/http"
 	"os"
 	"time"
 )
 
 // 大量のデータを生成するサイトを見つけ、fetchallを2回実行し、キャッシュされているか？・同じ内容を取得できているか？を確認、出力内容をファイルに保存
-
-// todo: 毎回同じ内容を取得できているかどうかの確認
 
 func main() {
 	start := time.Now()
