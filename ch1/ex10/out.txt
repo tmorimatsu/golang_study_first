@@ -1,0 +1,6 @@
+0.61s  699639 https://www.airbnb.com [HIT, MISS]
+0.45s  699639 https://www.airbnb.com [HIT, MISS]
+0.21s  699639 https://www.airbnb.com [HIT, HIT]
+0.20s  699639 https://www.airbnb.com [HIT, HIT]
+0.77s  699638 https://www.airbnb.com [HIT, MISS]
+0.54s  715609 https://www.airbnb.com [HIT, MISS]
