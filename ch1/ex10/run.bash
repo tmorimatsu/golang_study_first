@@ -13,6 +13,7 @@ do
 done
 
 # contents/i.txtの内容比較
+# todo: ここはテストに書く
 echo "if nothing is displayed after this, all files are the same"
 for i in {0..5}
 do
