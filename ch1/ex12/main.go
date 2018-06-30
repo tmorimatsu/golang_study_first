@@ -9,6 +9,7 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -17,27 +18,42 @@ func main() {
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
+type Params struct {
+	cycles  float64 // number of complete x oscillator revolutions
+	res     float64 // angular resolution
+	size    int     // image canvas covers [-size..+size]
+	nframes int     // number of animation frames
+	delay   int     // delay between frames in 10ms units
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Print(err)
 	}
 
 	// パラメーターの構造体をクエリから取得し、メソッドに渡す
-	type Params struct {
-		cycles  int     // number of complete x oscillator revolutions
-		res     float64 // angular resolution
-		size    int     // image canvas covers [-size..+size]
-		nframes int     // number of animation frames
-		delay   int     // delay between frames in 10ms units
-	}
-	var test Params
-	var err error
-	test.cycles, err = strconv.Atoi(r.Form.Get("cycles"))
+	var params Params
+	params.cycles = getMapData(r.Form, "cycles", 5.0)
+	params.res = getMapData(r.Form, "res", 0.0001)
+	params.size = int(getMapData(r.Form, "size", 100))
+	params.nframes = int(getMapData(r.Form, "nframes", 64))
+	params.delay = int(getMapData(r.Form, "delay", 8))
+
+	lissajous(w, params)
+}
+
+func getMapData(m url.Values, key string, defaultValue float64) float64 {
+
+	// TODO: 値に上限値, 下限値を決めてバリデーション
+	// 処理に時間がかかりすぎて終わらないようになる可能性があるため
+
+	value, err := strconv.ParseFloat(m.Get(key), 64)
 	if err != nil {
+		log.Print(key)
 		log.Print(err)
-		test.cycles = 5
+		return defaultValue
 	}
-	lissajous(w, float64(test.cycles))
+	return value
 }
 
 var palette = []color.Color{color.Black, color.RGBA{0, 0xff, 0, 0xff}, color.RGBA{0, 0, 0xff, 0xff}}
@@ -48,14 +64,14 @@ const (
 	blueIndex  = 2 // パレットの次の色
 )
 
-func lissajous(out io.Writer /*params *test*/, cycles float64) {
-	const (
-		//cycles  = 5     // number of complete x oscillator revolutions
-		res     = 0.0001 // angular resolution
-		size    = 100    // image canvas covers [-size..+size]
-		nframes = 64     // number of animation frames
-		delay   = 8      // delay between frames in 10ms units
-	)
+func lissajous(out io.Writer, params Params) {
+
+	cycles := params.cycles   // number of complete x oscillator revolutions
+	res := params.res         // angular resolution
+	size := params.size       // image canvas covers [-size..+size]
+	nframes := params.nframes // number of animation frames
+	delay := params.delay     // delay between frames in 10ms units
+
 	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0 // phase difference
@@ -65,7 +81,7 @@ func lissajous(out io.Writer /*params *test*/, cycles float64) {
 		for t := 0.0; t < cycles*2.0*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
-			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), greenIndex)
+			img.SetColorIndex(size+int(x*float64(size)+0.5), size+int(y*float64(size)+0.5), greenIndex)
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
