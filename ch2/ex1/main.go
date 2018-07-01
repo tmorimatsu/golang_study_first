@@ -1,16 +1,16 @@
-// tmpcomvパッケージは摂氏(Celsius) と華氏(Fahrenheit) の温度変換を行います
+// tmpconvパッケージは摂氏(Celsius) と華氏(Fahrenheit) の温度変換を行います
 package main
 
 import (
 	"fmt"
 
-	"./tempcomv"
+	"./tempconv"
 )
 
 // TODO: パッケージのテストを書く
 
 func main() {
-	fmt.Println(tempcomv.CToF(100))
-	fmt.Println(tempcomv.FToC(100))
-	fmt.Println(tempcomv.CToK(100))
+	fmt.Println(tempconv.CToF(100))
+	fmt.Println(tempconv.FToC(100))
+	fmt.Println(tempconv.CToK(100))
 }
