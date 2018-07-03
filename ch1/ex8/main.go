@@ -12,11 +12,8 @@ import (
 
 func main() {
 	for _, url := range os.Args[1:] {
-		// todo:別関数で定義してtestを作る
 		originalUrl := url
-		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
-			url = "http://" + url
-		}
+		url = addUrlPrefix(originalUrl)
 		resp, err :=  http.Get(url)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
@@ -34,4 +31,12 @@ func main() {
 			fmt.Println("url: " + url)
 		}
 	}
+}
+
+func addUrlPrefix(s string) string {
+	if !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "https://") {
+		url := "http://" + s
+		return url
+	}
+	return s
 }
