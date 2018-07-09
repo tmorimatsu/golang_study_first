@@ -11,8 +11,9 @@ const (
 	AbsoluteZeroC Celsius = -273.15
 	FreezingC     Celsius = 0
 	BoilingC      Celsius = 100
+	errmsg        string  = "温度の取りうる範囲ではありません"
 )
 
-func (c Celsius) String() string    { return fmt.Sprintf("%g℃", c) }
+func (c Celsius) String() string    { return fmt.Sprintf("%g°C", c) }
 func (f Fahrenheit) String() string { return fmt.Sprintf("%g°F", f) }
 func (k Kelvin) String() string     { return fmt.Sprintf("%gK", k) }
