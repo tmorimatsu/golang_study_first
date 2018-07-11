@@ -8,7 +8,7 @@ import (
 	"./joinargs"
 )
 
-// リファクタとefficient.go, inefficient.goの削除
+// FIXME:動かないため修正
 
 func main() {
 	fmt.Println("Start effcient method")

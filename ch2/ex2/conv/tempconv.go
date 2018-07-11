@@ -26,11 +26,11 @@ func (f Fahrenheit) String() string {
 // 単位の変換
 func CelsiusToFahrenheit(c Celsius) Fahrenheit {
 	validationCelsius(c)
-	return Fahrenheit(c*9/5 + 32)
+	return Fahrenheit(Round(float64(c*9/5 + 32), 2))
 }
 func FahrenheitToCelsius(f Fahrenheit) Celsius {
 	validationFahrenheit(f)
-	return Celsius((f - 32) * 5 / 9)
+  return Celsius(Round(float64((f - 32) * 5 / 9), 2))
 }
 
 func validationCelsius(c Celsius) {

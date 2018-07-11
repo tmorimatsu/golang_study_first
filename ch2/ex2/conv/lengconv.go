@@ -1,6 +1,9 @@
 package conv
 
-import "fmt"
+import (
+	"fmt"
+	_"errors"
+)
 
 type Meter float64
 type Feet float64
@@ -16,17 +19,25 @@ func (f Feet) String() string {
 	return fmt.Sprintf("%gF", f)
 }
 
-func MeterToFeet(m Meter) Feet {
-	validationLength(float64(m))
-	return Feet(m * 3.28084)
-}
-func FeetToMeter(f Feet) Meter {
-	validationLength(float64(f))
-	return Meter(f / 3.28084)
-}
-
-func validationLength(f float64) {
-	if f < 0 {
+func MeterToFeet(m Meter) /*(Feet, error)*/Feet {
+	if !validationLength(float64(m)) {
+		//return -1, errors.New(errMsgLength)
 		panic(errMsgLength)
 	}
+	return Feet(Round(float64(m * 3.28084), 2))//, nil
+}
+func FeetToMeter(f Feet) /*(Meter, error)*/Meter {
+	if !validationLength(float64(f)) {
+		//return -1, errors.New(errMsgLength)
+		panic(errMsgLength)
+	}
+	return Meter(Round(float64(f / 3.28084),2))//, nil
+}
+
+func validationLength(f float64) bool {
+	if f < 0 {
+		//panic(errMsgLength)
+		return false
+	}
+	return true
 }

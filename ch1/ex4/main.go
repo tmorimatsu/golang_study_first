@@ -8,6 +8,8 @@ import (
 
 // 重複した行のそれぞれが含まれていた全てのファイルの名前を出力する用に修正しなさい
 
+// FIXME: 動かない時がある
+
 func main() {
 	file_counts :=  make(map[string]map[string]int)
 	files := os.Args[1:]
