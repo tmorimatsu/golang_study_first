@@ -10,6 +10,8 @@ import (
 
 // 大量のデータを生成するサイトを見つけ、fetchallを2回実行し、キャッシュされているか？・同じ内容を取得できているか？を確認、出力内容をファイルに保存
 
+// FIXME: テスト + リファクタ
+
 func main() {
 	start := time.Now()
 	filename := "out.txt"
@@ -26,7 +28,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Fialed to open the file")
 			os.Exit(1)
 		}
-		f.Write([]byte(res+"\n"))
+		f.Write([]byte(res + "\n"))
 		f.Close()
 	}
 	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())

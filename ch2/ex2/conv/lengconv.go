@@ -1,8 +1,8 @@
 package conv
 
 import (
+	_ "errors"
 	"fmt"
-	_"errors"
 )
 
 type Meter float64
@@ -19,19 +19,19 @@ func (f Feet) String() string {
 	return fmt.Sprintf("%gF", f)
 }
 
-func MeterToFeet(m Meter) /*(Feet, error)*/Feet {
+func MeterToFeet(m Meter) /*(Feet, error)*/ Feet {
 	if !validationLength(float64(m)) {
 		//return -1, errors.New(errMsgLength)
 		panic(errMsgLength)
 	}
-	return Feet(Round(float64(m * 3.28084), 2))//, nil
+	return Feet(Round(float64(m*3.28084), 2)) //, nil
 }
-func FeetToMeter(f Feet) /*(Meter, error)*/Meter {
+func FeetToMeter(f Feet) /*(Meter, error)*/ Meter {
 	if !validationLength(float64(f)) {
 		//return -1, errors.New(errMsgLength)
 		panic(errMsgLength)
 	}
-	return Meter(Round(float64(f / 3.28084),2))//, nil
+	return Meter(Round(float64(f/3.28084), 2)) //, nil
 }
 
 func validationLength(f float64) bool {
@@ -41,3 +41,9 @@ func validationLength(f float64) bool {
 	}
 	return true
 }
+
+/*
+panicではなくこっちを使う？
+	fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+	os.Exit(1)
+*/
