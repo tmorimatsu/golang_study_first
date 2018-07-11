@@ -8,7 +8,7 @@ import (
 
 // 重複した行のそれぞれが含まれていた全てのファイルの名前を出力する用に修正しなさい
 
-// FIXME: 動かない時がある
+// HACK:クソ密結合の解消
 
 func main() {
 	file_counts :=  make(map[string]map[string]int)
