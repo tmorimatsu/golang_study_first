@@ -1,0 +1,6 @@
+0.41s  862178 https://www.airbnb.com [HIT, HIT]
+0.25s  862211 https://www.airbnb.com [HIT, HIT]
+0.25s  862178 https://www.airbnb.com [HIT, HIT]
+0.29s  862437 https://www.airbnb.com [HIT, HIT]
+0.22s  862437 https://www.airbnb.com [HIT, HIT]
+0.23s  862437 https://www.airbnb.com [HIT, HIT]
