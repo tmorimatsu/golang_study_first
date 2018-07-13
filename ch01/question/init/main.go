@@ -12,13 +12,13 @@ func init() {
 }
 
 func init() {
-	fmt.Println("test2")
-}
-
-func init() {
 	fmt.Println("test1")
 }
 
 func init() {
 	fmt.Println("test2")
+}
+
+func init() {
+	fmt.Println("test3")
 }
