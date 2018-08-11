@@ -16,6 +16,8 @@ const (
 
 var sin30, cos30 = math.Sin(angle), math.Cos(angle)
 
+WIP
+
 func main() {
 	fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
 		"style='stroke: grey; fill: white; stroke-width: 0.7' "+
@@ -52,5 +54,5 @@ func corner(i, j int) (float64, float64, bool) {
 
 func f(x, y float64) float64 {
 	r := math.Hypot(x, y) // (0.0)からの距離
-	return math.Sin(r) / r
+	return math.Sin(r)/r
 }

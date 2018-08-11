@@ -29,7 +29,6 @@ func main() {
 
 			if aOk && bOk && cOk && dOk {
 				fmt.Printf("<polygon points='%g, %g %g, %g %g,%g %g, %g' /> \n", ax, ay, bx, by, cx, cy, dx, dy)
-				continue
 			}
 		}
 	}
