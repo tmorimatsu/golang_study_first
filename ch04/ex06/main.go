@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"unicode"
 )
 
 /**
@@ -11,16 +12,16 @@ import (
  */
 
 func main() {
-	b := []byte("tetet e    ")
-	compressSpaces(b)
+	b := []byte("t    etet   e")
+	fmt.Println(compressSpaces(b))
 }
 
-func compressSpaces(b []byte) {
-	for i := 0; i < len(b)-1; i++ {
-		fmt.Println(b[i])
-		if b[i] == []byte(" ")[0] && b[i] == b[i+1] {
-			// c := unicode.IsSpace(rune(b[i]))
-			// fmt.Println(c)
+func compressSpaces(b []byte) string {
+	for i := 0; i < len(b); i++ {
+		if unicode.IsSpace(rune(b[i])) && b[i] == b[i+1] {
+			b = append(b[:i], b[i+1:]...)
+			i--
 		}
 	}
+	return string(b)
 }

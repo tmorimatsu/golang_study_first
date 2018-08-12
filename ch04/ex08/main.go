@@ -9,6 +9,8 @@ import (
 	"unicode/utf8"
 )
 
+WIP
+
 func main() {
 	charcount()
 }

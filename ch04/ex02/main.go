@@ -12,12 +12,12 @@ import (
 func main() {
 	lenArgs := len(os.Args)
 	if lenArgs < 2 || 3 < lenArgs {
-		fmt.Println("引数は変換する 文字列 変換用フラグ[optional] で指定してください")
+		fmt.Println("文字列 変換用フラグ[optional] で指定してください")
 		return
 	} else {
 		if lenArgs == 2 {
 			converted := convertToSHA256(os.Args[1])
-			fmt.Printf("test %x", converted)
+			fmt.Printf("%x", converted)
 			return
 		}
 		if lenArgs == 3 {
@@ -25,11 +25,11 @@ func main() {
 			case "-384":
 				// SHA384のハッシュを出力
 				converted := convertToSHA384(os.Args[1])
-				fmt.Printf("test %x", converted)
+				fmt.Printf("%x", converted)
 			case "-512":
 				// SHA512のハッシュを出力
 				converted := convertToSHA512(os.Args[1])
-				fmt.Printf("test %x", converted)
+				fmt.Printf("%x", converted)
 			default:
 				fmt.Println("フラグは '-384', '-512' の2種類です")
 			}
