@@ -22,31 +22,45 @@ func main() {
 		"width='%d' height='%d' >", width, height)
 	for i := 0; i < cells; i++ {
 		for j := 0; j < cells; j++ {
-			ax, ay, aOk := corner(i+1, j)
-			bx, by, bOk := corner(i, j)
-			cx, cy, cOk := corner(i, j+1)
-			dx, dy, dOk := corner(i+1, j+1)
-
-			if aOk && bOk && cOk && dOk {
-				fmt.Printf("<polygon points='%g, %g %g, %g %g,%g %g, %g' /> \n", ax, ay, bx, by, cx, cy, dx, dy)
+			ax, ay, err := corner(i+1, j)
+			if err != nil {
+				continue
 			}
+			bx, by, err := corner(i, j)
+			if err != nil {
+				continue
+			}
+			cx, cy, err := corner(i, j+1)
+			if err != nil {
+				continue
+			}
+			dx, dy, err := corner(i+1, j+1)
+			if err != nil {
+				continue
+			}
+
+			fmt.Printf("<polygon points='%g, %g %g, %g %g,%g %g, %g' /> \n", ax, ay, bx, by, cx, cy, dx, dy)
+
 		}
 	}
 	fmt.Printf("</svg>")
 }
 
-func corner(i, j int) (float64, float64, bool) {
+func corner(i, j int) (float64, float64, error) {
 	x := xyrange * (float64(i)/cells - 0.5)
 	y := xyrange * (float64(j)/cells - 0.5)
 
 	z := f(x, y)
-	if math.IsInf(z, 0) || math.IsNaN(z) {
-		return 0, 0, false
+	if math.IsInf(z, 0) {
+		return 0, 0, fmt.Errorf("infinity")
+	}
+	if math.IsNaN(z) {
+		return 0, 0, fmt.Errorf("not a number")
 	}
 
 	sx := width/2 + (x-y)*cos30*xyscale
 	sy := height/2 + (x+y)*sin30*xyscale - z*zscale
-	return sx, sy, true
+	return sx, sy, nil
 }
 
 func f(x, y float64) float64 {

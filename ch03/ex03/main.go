@@ -16,40 +16,52 @@ const (
 
 var sin30, cos30 = math.Sin(angle), math.Cos(angle)
 
-WIP
-
 func main() {
 	fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
 		"style='stroke: grey; fill: white; stroke-width: 0.7' "+
 		"width='%d' height='%d' >", width, height)
 	for i := 0; i < cells; i++ {
 		for j := 0; j < cells; j++ {
-			ax, ay, az, aOk := corner(i+1, j)
-			bx, by, bz, bOk := corner(i, j)
-			cx, cy, cz, cOk := corner(i, j+1)
-			dx, dy, dz, dOk := corner(i+1, j+1)
-
-			color := colorFromZ((az+bz+cz+dz)/4, 1.0, 0.5)
-			if aOk && bOk && cOk && dOk {
-				fmt.Printf("<polygon points='%g, %g %g, %g %g,%g %g, %g' fill='%s' /> \n", ax, ay, bx, by, cx, cy, dx, dy, color)
+			ax, ay, acolor, err := corner(i+1, j)
+			if err != nil {
+				continue
 			}
+			bx, by, _, err := corner(i, j)
+			if err != nil {
+				continue
+			}
+			cx, cy, _, err := corner(i, j+1)
+			if err != nil {
+				continue
+			}
+			dx, dy, _, err := corner(i+1, j+1)
+			if err != nil {
+				continue
+			}
+
+			fmt.Printf("<polygon points='%g, %g %g, %g %g,%g %g, %g' fill='%s' /> \n", ax, ay, bx, by, cx, cy, dx, dy, acolor)
+
 		}
 	}
 	fmt.Printf("</svg>")
 }
 
-func corner(i, j int) (float64, float64, float64, bool) {
+func corner(i, j int) (float64, float64, string, error) {
 	x := xyrange * (float64(i)/cells - 0.5)
 	y := xyrange * (float64(j)/cells - 0.5)
 
 	z := f(x, y)
-	if math.IsInf(z, 0) || math.IsNaN(z) {
-		return 0, 0, 0, false
+	if math.IsInf(z, 0) {
+		return 0, 0, "", fmt.Errorf("infinity")
+	}
+
+	if math.IsNaN(z) {
+		return 0, 0, "", fmt.Errorf("not a number")
 	}
 
 	sx := width/2 + (x-y)*cos30*xyscale
 	sy := height/2 + (x+y)*sin30*xyscale - z*zscale
-	return sx, sy, z, true
+	return sx, sy, color(z), nil
 }
 
 func f(x, y float64) float64 {
@@ -57,13 +69,10 @@ func f(x, y float64) float64 {
 	return math.Sin(r) / r
 }
 
-func colorFromZ(z, max, min float64) string {
-	return fmt.Sprintf("#%02x00%02x", int(math.Abs(z-min)*255), int(math.Abs(max-z)*255))
-	// half := (max - min) / 2
-	// v := int(math.Abs(z-half) * 255)
-	// if z >= half {
-	// 	return fmt.Sprintf("#%02x0000", v)
-	// } else {
-	// 	return fmt.Sprintf("#0000%02x", v)
-	// }
+func color(z float64) string {
+	if z < 0 {
+		return "#0000FF"
+	}
+	v := int(z * 255)
+	return fmt.Sprintf("#%02x00%02x", v, 255-v)
 }
