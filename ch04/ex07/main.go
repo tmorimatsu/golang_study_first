@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unicode/utf8"
+)
 
 /**
 * UTF-8でエンコードされた文字列を表す[]byteスライス文字を、
@@ -9,20 +12,27 @@ import "fmt"
 *
  */
 
- WIP
 
 func main() {
-	b := []byte("abcdefgh")
-	fmt.Println(string(reverse(b)))
+	s := "あ❗️ スーモ❗️🌚ダン💥ダン💥ダン💥シャーン🎶スモ🌝スモ🌚スモ🌝スモ🌚スモ🌝スモ🌚ス〜〜〜モ⤴スモ🌚スモ🌝スモ🌚スモ🌝スモ🌚スモ🌝ス～～～モ⤵🌞"
+	bytes := []byte(s)
+	bytes = reverseUTF8(bytes)
+	fmt.Println(string(bytes))
 }
 
-func reverse(b []byte) []byte {
-
-	if len(b) < 2 {
-		return b
+func reverseUTF8(b []byte) []byte {
+	for i := 0; i < len(b); {
+		_, size := utf8.DecodeRune(b[i:])
+		reverse(b[i : i+size])
+		i += size
 	}
-
-	b = append(reverse(), reverse()...)
-
+	reverse(b)
 	return b
+}
+
+func reverse(b []byte) {
+	size := len(b)
+	for i := 0; i < len(b)/2; i++ {
+		b[i], b[size-1-i] = b[size-1-i], b[i]
+	}
 }
