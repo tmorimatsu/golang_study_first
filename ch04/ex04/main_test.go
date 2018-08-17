@@ -1,13 +1,22 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestRotate(t *testing.T) {
-	arr := []int{1, 2, 3, 4, 5, 6, 7, 8}
-	rotatedArr := rotate(arr, 3)
-	expected := arr[3]
-	actual := rotatedArr[0]
-	if expected != actual {
-		t.Errorf("actual %v\nwant %v", actual, expected)
+	tests := []struct {
+		arr  []int
+		i    int
+		want []int
+	}{
+		{[]int{1, 2, 3, 4, 5, 6, 7, 8}, 3, []int{4, 5, 6, 7, 8, 1, 2, 3}},
+	}
+	for _, test := range tests {
+		actual := rotate(test.arr, test.i)
+		if !reflect.DeepEqual(actual, test.want) {
+			t.Errorf("actual %v\nwant %v", actual, test.want)
+		}
 	}
 }

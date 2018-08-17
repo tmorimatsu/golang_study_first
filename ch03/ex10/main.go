@@ -11,16 +11,30 @@ func main() {
 }
 
 func comma(s string) string {
-	n := len(s)
-	if n <= 3 {
-		return s
+	// n := len(s)
+	// if n <= 3 {
+	// 	return s
+	// }
+	// var buf bytes.Buffer
+	// for i := 0; i < n; i++ {
+	// 	buf.WriteString(s[i : i+1])
+	// 	if i%3 == n%3 && i != n-1 {
+	// 		buf.WriteString(",")
+	// 	}
+	// }
+	// return buf.String()
+	if len(s) == 0 {
+		return ""
 	}
-	var buf bytes.Buffer
-	for i := 0; i < n; i++ {
-		buf.WriteString(s[i : i+1])
-		if i%3 == n%3-1 && i != n-1 {
-			buf.WriteString(",")
-		}
+	b := &bytes.Buffer{}
+	pre := len(s) % 3
+	if pre == 0 {
+		pre = 3
 	}
-	return buf.String()
+	b.WriteString(s[:pre])
+	for i := pre; i < len(s); i += 3 {
+		b.WriteByte(',')
+		b.WriteString(s[i : i+3])
+	}
+	return b.String()
 }

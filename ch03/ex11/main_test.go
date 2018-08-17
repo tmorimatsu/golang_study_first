@@ -28,3 +28,26 @@ func TestCommaWithFloatingPoint(t *testing.T) {
 		t.Errorf("actual %v\nwant %v", actual, expected)
 	}
 }
+
+func TestTmp(t *testing.T) {
+	tests := []struct {
+		s, want string
+	}{
+		{"", ""},
+		{"1", "1"},
+		{"12", "12"},
+		{"123", "123"},
+		{"1234", "1,234"},
+		{"-1", "-1"},
+		{"-1.2", "-1.2"},
+		{"-123", "-123"},
+		{"-12.34", "-12.34"},
+		{"-1234", "-1,234"},
+	}
+	for _, test := range tests {
+		got := comma(test.s)
+		if got != test.want {
+			t.Errorf("comma(%q), got %q, want %q", test.s, got, test.want)
+		}
+	}
+}
