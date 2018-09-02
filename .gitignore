@@ -3,6 +3,7 @@
 .DS_Store
 .json
 .vscode/
+.idea/
 
 # Specific
 **/**/main
