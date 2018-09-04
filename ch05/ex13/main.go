@@ -1,15 +1,17 @@
 package main
 
 import (
-	"os"
-	"fmt"
-	"net/http"
-	"golang.org/x/net/html"
-	"log"
 	"bufio"
+	"fmt"
+	"golang.org/x/net/html"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 	"strings"
 )
+
+// (WIP)
 
 func main() {
 	breadthFirst(crawl, os.Args[1:])
@@ -60,9 +62,6 @@ func cloneHtml(path, content string) error {
 	return nil
 }
 
-
-
-
 func extract(url string) (linkList []string, path string, content string, err error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -73,13 +72,13 @@ func extract(url string) (linkList []string, path string, content string, err er
 		return nil, "", "", fmt.Errorf("getting %s: %s", url, resp.Status)
 	}
 
-		// ioutil.ReadAll(resp.Body) をすると後のParseに影響が出る
-		byteArray, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		content = string(byteArray)
-		path = "./" + resp.Request.URL.Host + resp.Request.URL.Path
+	// ioutil.ReadAll(resp.Body) をすると後のParseに影響が出る
+	byteArray, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	content = string(byteArray)
+	path = "./" + resp.Request.URL.Host + resp.Request.URL.Path
 
 	doc, err := html.Parse(strings.NewReader(content))
 	resp.Body.Close()
