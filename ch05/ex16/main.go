@@ -25,6 +25,5 @@ func join(sep string, a ...string) string {
 			b.Write([]byte(sep))
 		}
 	}
-
 	return b.String()
 }
