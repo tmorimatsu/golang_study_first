@@ -4,6 +4,8 @@ import (
 	"io"
 )
 
+// TODO: 実装
+
 func main() {
 
 }
