@@ -43,11 +43,11 @@ func handleConn(conn net.Conn) {
 
 	input := bufio.NewScanner(conn)
 	for input.Scan() {
-		messages <- who + ": " + input.Text()
+		messages <- who + ": " + input.Text() + "\n"
 	}
 
 	leaving <- ch
-	messages <- who + " has left"
+	messages <- who + " has left\n"
 	conn.Close()
 }
 

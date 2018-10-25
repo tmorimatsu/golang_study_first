@@ -19,6 +19,7 @@ var (
 
 // 新たに到着したクライアントに対して現在のクライアントを知らせる
 
+// モニター
 func broadcaster() {
 	clients := make(map[client]bool)
 	for {
@@ -84,7 +85,6 @@ func main() {
 		go handleConn(conn)
 	}
 }
-
 
 func toString(s []string) string {
 	var str string
