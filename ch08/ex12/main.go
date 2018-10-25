@@ -18,7 +18,6 @@ var (
 )
 
 // 新たに到着したクライアントに対して現在のクライアントを知らせる
-// [WIP]
 
 func broadcaster() {
 	clients := make(map[client]bool)
@@ -31,11 +30,10 @@ func broadcaster() {
 		case cli := <-entering:
 			m := <-members
 			clients[cli] = true
-			// TODO: ここで今いるメンバーを出力する
-			for _, c := range m {
-				// messages <- "current: " + c
-				log.Println(c)
-			}
+			// 今いるメンバーを出力する
+			go func(member []string) {
+				messages <- "current users: " + toString(member) + "\n"
+			}(m)
 		case cli := <-leaving:
 			delete(clients, cli)
 			close(cli)
@@ -85,4 +83,16 @@ func main() {
 		}
 		go handleConn(conn)
 	}
+}
+
+
+func toString(s []string) string {
+	var str string
+	for i, v := range s {
+		if i != 0 {
+			str += ", "
+		}
+		str += v
+	}
+	return str
 }
