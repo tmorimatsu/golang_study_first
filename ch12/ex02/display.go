@@ -1,82 +1,50 @@
-package main
+package display
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
 	"strconv"
 )
 
-func main() {
-	Display("test", 3)
-	Display("float", 3.00)
-	Display("float", map[struct{ x int }]int{{1}: 2, {2}: 3})
-
-}
-
-func formatMapKey(v reflect.Value) string {
-	switch v.Kind() {
-	case reflect.Struct:
-		b := &bytes.Buffer{}
-		b.WriteByte('{')
-		for i := 0; i < v.NumField(); i++ {
-			if i != 0 {
-				b.WriteString(", ")
-			}
-			fmt.Fprintf(b, "%s: %s", v.Type().Field(i).Name, formatAtom(v.Field(i)))
-		}
-		b.WriteByte('}')
-		return b.String()
-	case reflect.Array:
-		b := &bytes.Buffer{}
-		b.WriteByte('{')
-		for i := 0; i < v.Len(); i++ {
-			if i != 0 {
-				b.WriteString(", ")
-			}
-			fmt.Fprintf(b, "%s: %s", v.Type().Field(i).Name, formatAtom(v.Field(i)))
-		}
-		b.WriteByte('}')
-		return b.String()
-	default:
-		return formatAtom(v)
-	}
-}
-
 func Display(name string, x interface{}) {
 	fmt.Printf("Display %s (%T):\n", name, x)
-	display(name, reflect.ValueOf(x))
+	display(name, reflect.ValueOf(x), 0)
 }
 
-func display(path string, v reflect.Value) {
+func display(path string, v reflect.Value, steps int) {
+	steps++
+	if steps > 10 {
+		fmt.Printf("reached max steps\n")
+		return
+	}
 	switch v.Kind() {
 	case reflect.Invalid:
 		fmt.Printf("%s = invalid\n", path)
 	case reflect.Slice, reflect.Array:
 		for i := 0; i < v.Len(); i++ {
-			display(fmt.Sprintf("%s[%d]", path, i), v.Index(i))
+			display(fmt.Sprintf("%s[%d]", path, i), v.Index(i), steps)
 		}
 	case reflect.Struct:
 		for i := 0; i < v.NumField(); i++ {
 			fieldPath := fmt.Sprintf("%s.%s", path, v.Type().Field(i).Name)
-			display(fieldPath, v.Field(i))
+			display(fieldPath, v.Field(i), steps)
 		}
 	case reflect.Map:
 		for _, key := range v.MapKeys() {
-			display(fmt.Sprintf("%s[%s]", path, formatMapKey(key)), v.MapIndex(key))
+			display(fmt.Sprintf("%s[%s]", path, formatAtom(key)), v.MapIndex(key), steps)
 		}
 	case reflect.Ptr:
 		if v.IsNil() {
 			fmt.Printf("%s = nil\n", path)
 		} else {
-			display(fmt.Sprintf("(*%s)", path), v.Elem())
+			display(fmt.Sprintf("(*%s)", path), v.Elem(), steps)
 		}
 	case reflect.Interface:
 		if v.IsNil() {
 			fmt.Printf("%s = nil\n", path)
 		} else {
 			fmt.Printf("%s.type = %s\n", path, v.Elem().Type())
-			display(path+".value", v.Elem())
+			display(path+".value", v.Elem(), steps)
 		}
 	default:
 		fmt.Printf("%s = %s\n", path, formatAtom(v))
@@ -104,7 +72,6 @@ func formatAtom(v reflect.Value) string {
 		reflect.Slice, reflect.Map:
 		return v.Type().String() + " 0x" +
 			strconv.FormatUint(uint64(v.Pointer()), 16)
-	// TODO: 可能であればここで処理できるようにしたい
 	default:
 		return v.Type().String() + " value"
 	}

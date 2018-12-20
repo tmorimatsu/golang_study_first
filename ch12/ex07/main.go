@@ -9,7 +9,7 @@ import (
 	"text/scanner"
 )
 
-// TODO: テストコード
+// bug
 func main() {
 	type Movie struct {
 		Title, Subtitle string
@@ -42,6 +42,16 @@ func main() {
 		fmt.Print(err)
 	}
 	fmt.Print(string(data))
+
+	decoder := NewDecoder(bytes.NewBuffer(data))
+	out := new(Movie)
+	decoder.Decode(out)
+	if reflect.DeepEqual(strangelove, out) {
+		fmt.Println("success")
+	} else {
+		fmt.Println("fail")
+	}
+	fmt.Print(out)
 }
 
 func encode(buf *bytes.Buffer, v reflect.Value, indent int) error {
