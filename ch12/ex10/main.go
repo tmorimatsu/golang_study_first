@@ -9,7 +9,6 @@ import (
 	"text/scanner"
 )
 
-// TODO : テストケース
 func main() {
 
 }
