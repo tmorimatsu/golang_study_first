@@ -1,14 +1,10 @@
-package main
+package equal
 
 import (
 	"math"
 	"reflect"
 	"unsafe"
 )
-
-func main() {
-
-}
 
 func almostEquals(v1, v2 float64) bool {
 
