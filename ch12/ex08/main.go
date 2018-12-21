@@ -1,4 +1,4 @@
-package main
+package sexpr
 
 import (
 	"bytes"
@@ -8,10 +8,6 @@ import (
 	"strconv"
 	"text/scanner"
 )
-
-func main() {
-
-}
 
 type Decoder struct {
 	lex *lexer

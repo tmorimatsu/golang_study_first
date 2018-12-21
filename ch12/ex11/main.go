@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -9,27 +10,38 @@ import (
 	"strings"
 )
 
-// TODO : テスト
 func main() {
+	st := struct {
+		Test string `http:"test"`
+		Tmp  string `http:"tmp"`
+	}{
+		"test",
+		"tmp",
+	}
 
+	t, err := Pack("test.com", &st)
+	if err != nil {
+		log.Fatal(err)
+	}
+	print(t.String())
 }
 
-func Pack(ptr interface{}) (url.URL, error) {
-	v := reflect.ValueOf(ptr).Elem()
+func Pack(path string, i interface{}) (url.URL, error) {
+	v := reflect.ValueOf(i).Elem()
 	if v.Type().Kind() != reflect.Struct {
-		return url.URL{}, fmt.Errorf("pack: %v is not a struct", ptr)
+		return url.URL{}, fmt.Errorf("pack: %v is not a struct", i)
 	}
 	vals := &url.Values{}
 	for i := 0; i < v.NumField(); i++ {
-		fieldInfo := v.Type().Field(i)
-		tag := fieldInfo.Tag
+		feild := v.Type().Field(i)
+		tag := feild.Tag
 		name := tag.Get("http")
 		if name == "" {
-			name = strings.ToLower(fieldInfo.Name)
+			name = strings.ToLower(feild.Name)
 		}
 		vals.Add(name, fmt.Sprintf("%v", v.Field(i)))
 	}
-	return url.URL{RawQuery: vals.Encode()}, nil
+	return url.URL{Path: path, RawQuery: vals.Encode()}, nil
 }
 
 func Unpack(req *http.Request, ptr interface{}) error {
